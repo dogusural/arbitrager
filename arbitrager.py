@@ -1,10 +1,16 @@
 import requests,json
 
 
-response = requests.get('https://api.exchangeratesapi.io/latest')
-resp_json = json.loads(response.text)
-euro_try = float(resp_json['rates']['TRY'])
-print(euro_try)
+class euro_oracle:
+    def __init__(self,url:str):
+        self.url= url
+        self.euro_try = 0
+    def refresh(self)-> None:
+        response = requests.get(self.url)
+        resp_json = json.loads(response.text)
+        self.euro_try = float(resp_json['rates']['TRY'])
+    def get_euro_try_parity(self) -> float:
+        return self.euro_try
 
 class exchange:
     def __init__(self,exchange_url:str):
@@ -62,9 +68,9 @@ class turkish_exchange(exchange):
         self.bid_prices['XTZTRY'] = float(response_json['XTZ_TL']['highestBid'])
         self.bid_prices['LINKTRY'] = float(response_json['LINK_TL']['highestBid'])
     def get_ask_prices(self,response_json:dict):
-        self.bid_prices['BTCTRY'] = float(response_json['BTC_TL']['lowestAsk'])
-        self.bid_prices['XTZTRY'] = float(response_json['XTZ_TL']['lowestAsk'])
-        self.bid_prices['LINKTRY'] = float(response_json['LINK_TL']['lowestAsk'])
+        self.ask_prices['BTCTRY'] = float(response_json['BTC_TL']['lowestAsk'])
+        self.ask_prices['XTZTRY'] = float(response_json['XTZ_TL']['lowestAsk'])
+        self.ask_prices['LINKTRY'] = float(response_json['LINK_TL']['lowestAsk'])
 
 class europe_exchange(exchange):
    
@@ -96,12 +102,15 @@ class europe_exchange(exchange):
         self.ask_prices['XTZEUR'] = float(response_json['result']['XTZEUR']['a'][0])
         self.ask_prices['LINKEUR'] = float(response_json['result']['LINKEUR']['a'][0])
 
-
+euro_ticker = euro_oracle('https://api.exchangeratesapi.io/latest')
 kraken = europe_exchange('https://api.kraken.com/0/public/Ticker?pair=xbteur,xtzeur,linkeur')
 paribu = turkish_exchange('https://www.paribu.com/ticker')
 paribu.refresh()
 kraken.refresh()
+euro_ticker.refresh()
 
-print(paribu.get_btc_bid() - kraken.get_btc_ask()*euro_try)
-print(paribu.get_xtz_bid() -  kraken.get_xtz_ask()*euro_try)
-print(paribu.get_link_bid() -  kraken.get_link_ask()*euro_try)
+print(paribu.get_btc_bid() - kraken.get_btc_ask()*euro_ticker.get_euro_try_parity())
+print(paribu.get_xtz_bid() -  kraken.get_xtz_ask()*euro_ticker.get_euro_try_parity())
+print(paribu.get_link_bid() -  kraken.get_link_ask()*euro_ticker.get_euro_try_parity())
+
+print(euro_ticker.get_euro_try_parity())
