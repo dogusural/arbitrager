@@ -5,12 +5,32 @@ class euro_oracle:
     def __init__(self,url:str):
         self.url= url
         self.euro_try = 0
+        self.resp_json = {}
     def refresh(self)-> None:
         response = requests.get(self.url)
-        resp_json = json.loads(response.text)
-        self.euro_try = float(resp_json['rates']['TRY'])
+        self.resp_json = json.loads(response.text)
     def get_euro_try_parity(self) -> float:
+        pass
+
+class exchangeratesapi(euro_oracle):
+    def __init__(self,url:str):
+        super().__init__(url)
+    def refresh(self)-> None:
+        super().refresh()
+    def get_euro_try_parity(self) -> float:
+        self.euro_try = float(self.resp_json['rates']['TRY'])
         return self.euro_try
+
+class currconv(euro_oracle):
+    apikey = '6aa4fce38a7c1405c6b0'
+    def __init__(self,url:str):
+        super().__init__(url + self.apikey)
+    def refresh(self)-> None:
+        super().refresh()
+    def get_euro_try_parity(self) -> float:
+        self.euro_try = float(self.resp_json['EUR_TRY'])
+        return self.euro_try
+
 
 class exchange:
     def __init__(self,exchange_url:str):
@@ -102,15 +122,19 @@ class europe_exchange(exchange):
         self.ask_prices['XTZEUR'] = float(response_json['result']['XTZEUR']['a'][0])
         self.ask_prices['LINKEUR'] = float(response_json['result']['LINKEUR']['a'][0])
 
-euro_ticker = euro_oracle('https://api.exchangeratesapi.io/latest')
+exchange_rates = exchangeratesapi('https://api.exchangeratesapi.io/latest')
+curr_converter = currconv('https://free.currconv.com/api/v7/convert?q=EUR_TRY&compact=ultra&apiKey=')
+
 kraken = europe_exchange('https://api.kraken.com/0/public/Ticker?pair=xbteur,xtzeur,linkeur')
 paribu = turkish_exchange('https://www.paribu.com/ticker')
+
 paribu.refresh()
 kraken.refresh()
-euro_ticker.refresh()
+exchange_rates.refresh()
+curr_converter.refresh()
 
-print(paribu.get_btc_bid() - kraken.get_btc_ask()*euro_ticker.get_euro_try_parity())
-print(paribu.get_xtz_bid() -  kraken.get_xtz_ask()*euro_ticker.get_euro_try_parity())
-print(paribu.get_link_bid() -  kraken.get_link_ask()*euro_ticker.get_euro_try_parity())
 
-print(euro_ticker.get_euro_try_parity())
+print(paribu.get_btc_bid() - kraken.get_btc_ask()*curr_converter.get_euro_try_parity())
+print(paribu.get_xtz_bid() -  kraken.get_xtz_ask()*curr_converter.get_euro_try_parity())
+print(paribu.get_link_bid() -  kraken.get_link_ask()*curr_converter.get_euro_try_parity())
+
