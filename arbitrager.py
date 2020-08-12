@@ -28,6 +28,7 @@ class controller:
     def calculate_arbitrage(self):
         self.refresh()
         print(self.pair_1.get_btc_bid() - self.pair_2.get_btc_ask()*self.curr_converter.get_euro_try_parity())
+        print(self.pair_1.get_eth_bid() - self.pair_2.get_eth_ask()*self.curr_converter.get_euro_try_parity())
         print(self.pair_1.get_xtz_bid() -  self.pair_2.get_xtz_ask()*self.curr_converter.get_euro_try_parity())
         print(self.pair_1.get_link_bid() -  self.pair_2.get_link_ask()*self.curr_converter.get_euro_try_parity())
 

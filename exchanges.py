@@ -50,20 +50,27 @@ class PARIBU(exchange):
         return  self.ask_prices['LINKTRY']
     def get_link_bid(self):
         return  self.bid_prices['LINKTRY']
+    def get_eth_ask(self):
+        return  self.ask_prices['ETHTRY']
+    def get_eth_bid(self):
+        return  self.bid_prices['ETHTRY']
 
        
     def get_bid_prices(self,response_json:dict):
         self.bid_prices['BTCTRY'] = float(response_json['BTC_TL']['highestBid'])
         self.bid_prices['XTZTRY'] = float(response_json['XTZ_TL']['highestBid'])
         self.bid_prices['LINKTRY'] = float(response_json['LINK_TL']['highestBid'])
+        self.bid_prices['ETHTRY'] = float(response_json['ETH_TL']['highestBid'])
     def get_ask_prices(self,response_json:dict):
         self.ask_prices['BTCTRY'] = float(response_json['BTC_TL']['lowestAsk'])
         self.ask_prices['XTZTRY'] = float(response_json['XTZ_TL']['lowestAsk'])
         self.ask_prices['LINKTRY'] = float(response_json['LINK_TL']['lowestAsk'])
+        self.ask_prices['ETHTRY'] = float(response_json['ETH_TL']['lowestAsk'])
+
 
 class KRAKEN(exchange):
    
-    def __init__(self,exchange_url:str = 'https://api.kraken.com/0/public/Ticker?pair=xbteur,xtzeur,linkeur'):
+    def __init__(self,exchange_url:str = 'https://api.kraken.com/0/public/Ticker?pair=xbteur,xtzeur,linkeur,etheur'):
         super().__init__(exchange_url)
     def refresh(self):
         super().refresh()
@@ -80,13 +87,19 @@ class KRAKEN(exchange):
         return  self.ask_prices['LINKEUR']
     def get_link_bid(self):
         return  self.bid_prices['LINKEUR']
+    def get_eth_ask(self):
+        return  self.ask_prices['ETHEUR']
+    def get_eth_bid(self):
+        return  self.bid_prices['ETHEUR']
 
        
     def get_bid_prices(self,response_json:dict):
         self.bid_prices['BTCEUR'] = float(response_json['result']['XXBTZEUR']['b'][0])
         self.bid_prices['XTZEUR'] = float(response_json['result']['XTZEUR']['b'][0])
         self.bid_prices['LINKEUR'] = float(response_json['result']['LINKEUR']['b'][0])
+        self.bid_prices['ETHEUR'] = float(response_json['result']['XETHZEUR']['b'][0])
     def get_ask_prices(self,response_json:dict):
         self.ask_prices['BTCEUR'] = float(response_json['result']['XXBTZEUR']['a'][0])
         self.ask_prices['XTZEUR'] = float(response_json['result']['XTZEUR']['a'][0])
         self.ask_prices['LINKEUR'] = float(response_json['result']['LINKEUR']['a'][0])
+        self.ask_prices['ETHEUR'] = float(response_json['result']['XETHZEUR']['a'][0])
