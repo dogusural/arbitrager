@@ -33,7 +33,7 @@ import requests,json
 
 
 
-class turkish_exchange(exchange):
+class PARIBU(exchange):
     def __init__(self,exchange_url:str = 'https://www.paribu.com/ticker'):
         super().__init__(exchange_url)
     def refresh(self):
@@ -61,7 +61,7 @@ class turkish_exchange(exchange):
         self.ask_prices['XTZTRY'] = float(response_json['XTZ_TL']['lowestAsk'])
         self.ask_prices['LINKTRY'] = float(response_json['LINK_TL']['lowestAsk'])
 
-class europe_exchange(exchange):
+class KRAKEN(exchange):
    
     def __init__(self,exchange_url:str = 'https://api.kraken.com/0/public/Ticker?pair=xbteur,xtzeur,linkeur'):
         super().__init__(exchange_url)

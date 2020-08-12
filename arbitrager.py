@@ -4,8 +4,8 @@ import euro_oracles,exchanges
 
 class exchange_aggregator:
     def __init__(self):
-        self.paribu = exchanges.turkish_exchange()
-        self.kraken = exchanges.europe_exchange()
+        self.paribu = exchanges.PARIBU()
+        self.kraken = exchanges.KRAKEN()
         self.exchange_list= {
             'PARIBU': self.paribu,
             'KRAKEN': self.kraken
