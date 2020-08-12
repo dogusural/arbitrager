@@ -13,7 +13,7 @@ class euro_oracle:
         pass
 
 class exchangeratesapi(euro_oracle):
-    def __init__(self,url:str):
+    def __init__(self,url:str = 'https://api.exchangeratesapi.io/latest'):
         super().__init__(url)
     def refresh(self)-> None:
         super().refresh()
@@ -23,7 +23,7 @@ class exchangeratesapi(euro_oracle):
 
 class currconv(euro_oracle):
     apikey = '6aa4fce38a7c1405c6b0'
-    def __init__(self,url:str):
+    def __init__(self,url:str='https://free.currconv.com/api/v7/convert?q=EUR_TRY&compact=ultra&apiKey='):
         super().__init__(url + self.apikey)
     def refresh(self)-> None:
         super().refresh()

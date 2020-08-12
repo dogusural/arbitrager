@@ -34,7 +34,7 @@ import requests,json
 
 
 class turkish_exchange(exchange):
-    def __init__(self,exchange_url:str):
+    def __init__(self,exchange_url:str = 'https://www.paribu.com/ticker'):
         super().__init__(exchange_url)
     def refresh(self):
         super().refresh()
@@ -63,7 +63,7 @@ class turkish_exchange(exchange):
 
 class europe_exchange(exchange):
    
-    def __init__(self,exchange_url:str):
+    def __init__(self,exchange_url:str = 'https://api.kraken.com/0/public/Ticker?pair=xbteur,xtzeur,linkeur'):
         super().__init__(exchange_url)
     def refresh(self):
         super().refresh()
