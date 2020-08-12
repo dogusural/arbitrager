@@ -60,6 +60,11 @@ class controller:
        
 
 
-main = controller("PARIBU", "KRAKEN")
-main.calculate_arbitrage()
 
+
+def main():
+    arbitrager = controller("PARIBU", "KRAKEN")
+    arbitrager.calculate_arbitrage()
+
+if __name__ == "__main__":
+    main()
