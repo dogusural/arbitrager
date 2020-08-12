@@ -4,16 +4,7 @@ from tabulate import tabulate
 
 
 
-class exchange_aggregator:
-    def __init__(self):
-        self.paribu = exchanges.PARIBU()
-        self.kraken = exchanges.KRAKEN()
-        self.exchange_list= {
-            'PARIBU': self.paribu,
-            'KRAKEN': self.kraken
-        }
-    def get_exchange(self,exchange_name:str) -> exchanges.exchange:
-        return self.exchange_list[exchange_name]
+
 
 class console_drawer:
     @staticmethod
@@ -40,7 +31,7 @@ class controller:
         self.try_exchange = try_exchange
         self.euro_exchange = euro_exchange
         self.curr_converter = euro_oracles.currconv()
-        self.aggregator = exchange_aggregator()
+        self.aggregator = exchanges.exchange_aggregator()
         self.pair_1 = self.aggregator.get_exchange(try_exchange)
         self.pair_2 = self.aggregator.get_exchange(euro_exchange)
     def refresh(self):

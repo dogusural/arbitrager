@@ -1,3 +1,4 @@
+
 class exchange:
     def __init__(self,exchange_url:str):
         self.exchange_ticker=exchange_url
@@ -103,3 +104,14 @@ class KRAKEN(exchange):
         self.ask_prices['XTZEUR'] = float(response_json['result']['XTZEUR']['a'][0])
         self.ask_prices['LINKEUR'] = float(response_json['result']['LINKEUR']['a'][0])
         self.ask_prices['ETHEUR'] = float(response_json['result']['XETHZEUR']['a'][0])
+
+class exchange_aggregator:
+    def __init__(self):
+        self.paribu = PARIBU()
+        self.kraken = KRAKEN()
+        self.exchange_list= {
+            'PARIBU': self.paribu,
+            'KRAKEN': self.kraken
+        }
+    def get_exchange(self,exchange_name:str) -> exchange:
+        return self.exchange_list[exchange_name]
