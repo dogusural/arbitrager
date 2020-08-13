@@ -1,14 +1,17 @@
 
 class exchange:
-    def __init__(self,exchange_url:str):
+    def __init__(self,exchange_url:str,exchange_name:str):
         self.exchange_ticker=exchange_url
         self.bid_prices= dict()
         self.ask_prices= dict()
+        self.name = exchange_name
     def refresh(self):
         response = requests.get(self.exchange_ticker)
         resp_json = json.loads(response.text)
         self.get_bid_prices(resp_json)
         self.get_ask_prices(resp_json)
+    def get_name(self)->str:
+        return self.name
 
     def get_btc_ask(self):
         pass
@@ -36,7 +39,7 @@ import requests,json
 
 class PARIBU(exchange):
     def __init__(self,exchange_url:str = 'https://www.paribu.com/ticker'):
-        super().__init__(exchange_url)
+        super().__init__(exchange_url,"PARIBU")
     def refresh(self):
         super().refresh()
     def get_btc_ask(self):
@@ -55,7 +58,7 @@ class PARIBU(exchange):
         return  self.ask_prices['ETHTRY']
     def get_eth_bid(self):
         return  self.bid_prices['ETHTRY']
-
+   
        
     def get_bid_prices(self,response_json:dict):
         self.bid_prices['BTCTRY'] = float(response_json['BTC_TL']['highestBid'])
@@ -72,10 +75,9 @@ class PARIBU(exchange):
 class KRAKEN(exchange):
    
     def __init__(self,exchange_url:str = 'https://api.kraken.com/0/public/Ticker?pair=xbteur,xtzeur,linkeur,etheur'):
-        super().__init__(exchange_url)
+        super().__init__(exchange_url,"KRAKEN")
     def refresh(self):
         super().refresh()
-
     def get_btc_ask(self):
         return  self.ask_prices['BTCEUR']
     def get_btc_bid(self):
@@ -109,9 +111,13 @@ class exchange_aggregator:
     def __init__(self):
         self.paribu = PARIBU()
         self.kraken = KRAKEN()
-        self.exchange_list= {
-            'PARIBU': self.paribu,
-            'KRAKEN': self.kraken
-        }
-    def get_exchange(self,exchange_name:str) -> exchange:
-        return self.exchange_list[exchange_name]
+        self.euro_exchange_list= [
+            self.kraken,
+        ]
+        self.try_exchange_list= [
+            self.paribu,
+        ]
+    def get_turkish_exchanges_list(self) -> exchange:
+        return self.try_exchange_list
+    def get_european_exchanges_list(self) -> exchange:
+        return self.euro_exchange_list
