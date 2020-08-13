@@ -3,7 +3,7 @@ from draw import console_drawer
 
 
 
-class controller:
+class EuropeantoTurkishArbitrager:
     def __init__(self,capital_in_euros:int):
         self.capital = capital_in_euros
         self.curr_converter = euro_oracles.currconv()
@@ -70,7 +70,7 @@ class controller:
 
 
 def main():
-    arbitrager = controller(1000)
+    arbitrager = EuropeantoTurkishArbitrager(1000)
     arbitrager.calculate_arbitrage()
 
 if __name__ == "__main__":
