@@ -4,7 +4,8 @@ from draw import console_drawer
 
 
 class controller:
-    def __init__(self):
+    def __init__(self,capital_in_euros:int):
+        self.capital = capital_in_euros
         self.curr_converter = euro_oracles.currconv()
         self.aggregator = exchanges.exchange_aggregator()
         self.turkish_exchanges = self.aggregator.get_turkish_exchanges_list()
@@ -30,7 +31,8 @@ class controller:
         '\nEURO/TRY parity is ' + str(self.curr_converter.get_euro_try_parity()) +'\n'+ european_exchange.get_name() +
         ' Bitcoin price in TRY is '+ str(european_exchange.get_btc_ask()) + ' * ' + str(self.curr_converter.get_euro_try_parity()) +
         ' = '+ str(european_exchange.get_btc_ask()*self.curr_converter.get_euro_try_parity()) +
-        '\nArbitrage margin for Bitcoin is ' + str(turkish_exchange.get_btc_bid() - european_exchange.get_btc_ask()*self.curr_converter.get_euro_try_parity()) + ' TRY')
+        '\nArbitrage margin for Bitcoin is ' + str(turkish_exchange.get_btc_bid() - european_exchange.get_btc_ask()*self.curr_converter.get_euro_try_parity()) + ' TRY'+
+        '\nTotal profit for Bitcoin arbitrage is ' + str((self.capital / european_exchange.get_btc_ask()) * (turkish_exchange.get_btc_bid() - european_exchange.get_btc_ask()*self.curr_converter.get_euro_try_parity())) )
         console_drawer.draw(text)
         
     def calculate_eth_arbitrage(self,turkish_exchange:exchanges.exchange, european_exchange:exchanges.exchange):   
@@ -39,7 +41,8 @@ class controller:
         '\nEURO/TRY parity is ' + str(self.curr_converter.get_euro_try_parity()) +'\n'+ european_exchange.get_name() +
         ' Ethereum price in TRY is '+ str(european_exchange.get_eth_ask()) + ' * ' + str(self.curr_converter.get_euro_try_parity()) +
         ' = '+ str(european_exchange.get_eth_ask()*self.curr_converter.get_euro_try_parity()) +
-        '\nArbitrage margin for Ethereum is ' + str(turkish_exchange.get_eth_bid() - european_exchange.get_eth_ask()*self.curr_converter.get_euro_try_parity()) + ' TRY')
+        '\nArbitrage margin for Ethereum is ' + str(turkish_exchange.get_eth_bid() - european_exchange.get_eth_ask()*self.curr_converter.get_euro_try_parity()) + ' TRY'+
+        '\nTotal profit for Ethereum arbitrage is ' + str((self.capital / european_exchange.get_eth_ask()) * (turkish_exchange.get_eth_bid() - european_exchange.get_eth_ask()*self.curr_converter.get_euro_try_parity())) )
         console_drawer.draw(text)
 
     def calculate_xtz_arbitrage(self,turkish_exchange:exchanges.exchange, european_exchange:exchanges.exchange):   
@@ -48,7 +51,8 @@ class controller:
         '\nEURO/TRY parity is ' + str(self.curr_converter.get_euro_try_parity()) +'\n'+ european_exchange.get_name() +
         ' Tezos price in TRY is '+ str(european_exchange.get_xtz_ask()) + ' * ' + str(self.curr_converter.get_euro_try_parity()) +
         ' = '+ str(european_exchange.get_xtz_ask()*self.curr_converter.get_euro_try_parity()) +
-        '\nArbitrage margin for Tezos is ' + str(turkish_exchange.get_xtz_bid() - european_exchange.get_xtz_ask()*self.curr_converter.get_euro_try_parity()) + ' TRY')
+        '\nArbitrage margin for Tezos is ' + str(turkish_exchange.get_xtz_bid() - european_exchange.get_xtz_ask()*self.curr_converter.get_euro_try_parity()) + ' TRY'+
+        '\nTotal profit for Tezos arbitrage is ' + str((self.capital / european_exchange.get_xtz_ask()) * (turkish_exchange.get_xtz_bid() - european_exchange.get_xtz_ask()*self.curr_converter.get_euro_try_parity())) )
         console_drawer.draw(text)
 
     def calculate_link_arbitrage(self,turkish_exchange:exchanges.exchange, european_exchange:exchanges.exchange):   
@@ -57,7 +61,8 @@ class controller:
         '\nEURO/TRY parity is ' + str(self.curr_converter.get_euro_try_parity()) +'\n'+ european_exchange.get_name() +
         ' Link price in TRY is '+ str(european_exchange.get_link_ask()) + ' * ' + str(self.curr_converter.get_euro_try_parity()) +
         ' = '+ str(european_exchange.get_link_ask()*self.curr_converter.get_euro_try_parity()) +
-        '\nArbitrage margin for Link is ' + str(turkish_exchange.get_link_bid() - european_exchange.get_link_ask()*self.curr_converter.get_euro_try_parity()) + ' TRY')
+        '\nArbitrage margin for Link is ' + str(turkish_exchange.get_link_bid() - european_exchange.get_link_ask()*self.curr_converter.get_euro_try_parity()) + ' TRY'+
+        '\nTotal profit for link arbitrage is ' + str((self.capital / european_exchange.get_link_ask()) * (turkish_exchange.get_link_bid() - european_exchange.get_link_ask()*self.curr_converter.get_euro_try_parity())) )
         console_drawer.draw(text)
        
 
@@ -65,7 +70,7 @@ class controller:
 
 
 def main():
-    arbitrager = controller()
+    arbitrager = controller(1000)
     arbitrager.calculate_arbitrage()
 
 if __name__ == "__main__":
