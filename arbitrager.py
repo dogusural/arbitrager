@@ -94,7 +94,7 @@ class EuropeantoTurkishArbitrager:
 
 
 def main():
-    arbitrager = EuropeantoTurkishArbitrager(1000)
+    arbitrager = EuropeantoTurkishArbitrager(10000)
     arbitrager.calculate_arbitrage()
 
 if __name__ == "__main__":
