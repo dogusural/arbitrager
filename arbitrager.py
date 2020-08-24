@@ -24,6 +24,7 @@ class EuropeantoTurkishArbitrager:
                 self.calculate_eth_arbitrage(turkish_exchange,european_exchange)
                 self.calculate_xtz_arbitrage(turkish_exchange,european_exchange)
                 self.calculate_link_arbitrage(turkish_exchange,european_exchange)
+                self.calculate_ada_arbitrage(turkish_exchange,european_exchange)
 
     def calculate_btc_arbitrage(self,turkish_exchange:exchanges.exchange, european_exchange:exchanges.exchange):
 
@@ -88,13 +89,29 @@ class EuropeantoTurkishArbitrager:
         '\nLink which can be bought with the capital of '+ str(self.capital) + ' EUR is ' + str(self.capital) + ' / ' + str(european_exchange.get_link_ask()) + ' = ' + str(coin_amount) +
         '\nTotal profit for link arbitrage is ' + str(coin_amount) + ' * ' + str(arbitrage) + ' = ' + str(total_profit) + ' TRY' )
         console_drawer.draw(text)
+
+    def calculate_ada_arbitrage(self,turkish_exchange:exchanges.exchange, european_exchange:exchanges.exchange):
+
+        arbitrage = (turkish_exchange.get_ada_bid() - european_exchange.get_ada_ask()*self.curr_converter.get_euro_try_parity())
+        coin_amount = (self.capital / european_exchange.get_ada_ask())
+        total_profit = coin_amount * arbitrage
+
+        text = ('Ada bid price on '+ turkish_exchange.get_name() +  ' is ' + str(turkish_exchange.get_ada_bid())  + ' TRY' +
+        '\nAda ask price on ' + european_exchange.get_name() + ' is ' + str(european_exchange.get_ada_ask()) + ' EUR' +
+        '\nEURO/TRY parity is ' + str(self.curr_converter.get_euro_try_parity()) +'\n'+ european_exchange.get_name() +
+        ' Ada price in TRY is ' + str(european_exchange.get_ada_ask()) + ' * ' + str(self.curr_converter.get_euro_try_parity()) +
+        ' = '+ str(european_exchange.get_ada_ask()*self.curr_converter.get_euro_try_parity()) + ' TRY' +
+        '\nArbitrage margin for Ada is ' + str(turkish_exchange.get_ada_bid() - european_exchange.get_ada_ask()*self.curr_converter.get_euro_try_parity()) + ' TRY'+
+        '\nAda which can be bought with the capital of '+ str(self.capital) + ' EUR is ' + str(self.capital) + ' / ' + str(european_exchange.get_ada_ask()) + ' = ' + str(coin_amount) +
+        '\nTotal profit for Ada arbitrage is ' + str(coin_amount) + ' * ' + str(arbitrage) + ' = ' + str(total_profit) + ' TRY' )
+        console_drawer.draw(text)
        
 
 
 
 
 def main():
-    arbitrager = EuropeantoTurkishArbitrager(10000)
+    arbitrager = EuropeantoTurkishArbitrager(1000)
     arbitrager.calculate_arbitrage()
 
 if __name__ == "__main__":
