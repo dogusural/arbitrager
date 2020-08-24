@@ -66,6 +66,10 @@ class PARIBU(exchange):
         return  self.ask_prices['ADATRY']
     def get_ada_bid(self):
         return  self.bid_prices['ADATRY']
+    def get_xlm_ask(self):
+        return  self.ask_prices['XLMTRY']
+    def get_xlm_bid(self):
+        return  self.bid_prices['XLMTRY']
    
        
     def get_bid_prices(self,response_json:dict):
@@ -74,18 +78,22 @@ class PARIBU(exchange):
         self.bid_prices['LINKTRY'] = float(response_json['LINK_TL']['highestBid'])
         self.bid_prices['ETHTRY'] = float(response_json['ETH_TL']['highestBid'])
         self.bid_prices['ADATRY'] = float(response_json['ADA_TL']['highestBid'])
+        self.bid_prices['XLMTRY'] = float(response_json['XLM_TL']['highestBid'])
+
     def get_ask_prices(self,response_json:dict):
         self.ask_prices['BTCTRY'] = float(response_json['BTC_TL']['lowestAsk'])
         self.ask_prices['XTZTRY'] = float(response_json['XTZ_TL']['lowestAsk'])
         self.ask_prices['LINKTRY'] = float(response_json['LINK_TL']['lowestAsk'])
         self.ask_prices['ETHTRY'] = float(response_json['ETH_TL']['lowestAsk'])
         self.ask_prices['ADATRY'] = float(response_json['ADA_TL']['lowestAsk'])
+        self.ask_prices['XLMTRY'] = float(response_json['XLM_TL']['lowestAsk'])
+
 
 
 
 class KRAKEN(exchange):
    
-    def __init__(self,exchange_url:str = 'https://api.kraken.com/0/public/Ticker?pair=xbteur,xtzeur,linkeur,etheur,adaeur'):
+    def __init__(self,exchange_url:str = 'https://api.kraken.com/0/public/Ticker?pair=xbteur,xtzeur,linkeur,etheur,adaeur,xlmeur'):
         super().__init__(exchange_url,"KRAKEN")
     def refresh(self):
         super().refresh()
@@ -109,6 +117,10 @@ class KRAKEN(exchange):
         return  self.ask_prices['ADAEUR']
     def get_ada_bid(self):
         return  self.bid_prices['ADAEUR']
+    def get_xlm_ask(self):
+        return  self.ask_prices['XLMEUR']
+    def get_xlm_bid(self):
+        return  self.bid_prices['XLMEUR']
 
        
     def get_bid_prices(self,response_json:dict):
@@ -117,12 +129,15 @@ class KRAKEN(exchange):
         self.bid_prices['LINKEUR'] = float(response_json['result']['LINKEUR']['b'][0])
         self.bid_prices['ETHEUR'] = float(response_json['result']['XETHZEUR']['b'][0])
         self.bid_prices['ADAEUR'] = float(response_json['result']['ADAEUR']['b'][0])
+        self.bid_prices['XLMEUR'] = float(response_json['result']['XXLMZEUR']['b'][0])
     def get_ask_prices(self,response_json:dict):
         self.ask_prices['BTCEUR'] = float(response_json['result']['XXBTZEUR']['a'][0])
         self.ask_prices['XTZEUR'] = float(response_json['result']['XTZEUR']['a'][0])
         self.ask_prices['LINKEUR'] = float(response_json['result']['LINKEUR']['a'][0])
         self.ask_prices['ETHEUR'] = float(response_json['result']['XETHZEUR']['a'][0])
         self.ask_prices['ADAEUR'] = float(response_json['result']['ADAEUR']['a'][0])
+        self.ask_prices['XLMEUR'] = float(response_json['result']['XXLMZEUR']['a'][0])
+
 
 
 class exchange_aggregator:

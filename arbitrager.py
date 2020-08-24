@@ -25,6 +25,7 @@ class EuropeantoTurkishArbitrager:
                 self.calculate_xtz_arbitrage(turkish_exchange,european_exchange)
                 self.calculate_link_arbitrage(turkish_exchange,european_exchange)
                 self.calculate_ada_arbitrage(turkish_exchange,european_exchange)
+                self.calculate_xlm_arbitrage(turkish_exchange,european_exchange)
 
     def calculate_btc_arbitrage(self,turkish_exchange:exchanges.exchange, european_exchange:exchanges.exchange):
 
@@ -104,6 +105,22 @@ class EuropeantoTurkishArbitrager:
         '\nArbitrage margin for Ada is ' + str(turkish_exchange.get_ada_bid() - european_exchange.get_ada_ask()*self.curr_converter.get_euro_try_parity()) + ' TRY'+
         '\nAda which can be bought with the capital of '+ str(self.capital) + ' EUR is ' + str(self.capital) + ' / ' + str(european_exchange.get_ada_ask()) + ' = ' + str(coin_amount) +
         '\nTotal profit for Ada arbitrage is ' + str(coin_amount) + ' * ' + str(arbitrage) + ' = ' + str(total_profit) + ' TRY' )
+        console_drawer.draw(text)
+
+    def calculate_xlm_arbitrage(self,turkish_exchange:exchanges.exchange, european_exchange:exchanges.exchange):
+
+        arbitrage = (turkish_exchange.get_ada_bid() - european_exchange.get_ada_ask()*self.curr_converter.get_euro_try_parity())
+        coin_amount = (self.capital / european_exchange.get_ada_ask())
+        total_profit = coin_amount * arbitrage
+
+        text = ('Xlm bid price on '+ turkish_exchange.get_name() +  ' is ' + str(turkish_exchange.get_xlm_bid())  + ' TRY' +
+        '\nXlm ask price on ' + european_exchange.get_name() + ' is ' + str(european_exchange.get_xlm_ask()) + ' EUR' +
+        '\nEURO/TRY parity is ' + str(self.curr_converter.get_euro_try_parity()) +'\n'+ european_exchange.get_name() +
+        ' Xlm price in TRY is ' + str(european_exchange.get_xlm_ask()) + ' * ' + str(self.curr_converter.get_euro_try_parity()) +
+        ' = '+ str(european_exchange.get_xlm_ask()*self.curr_converter.get_euro_try_parity()) + ' TRY' +
+        '\nArbitrage margin for Xlm is ' + str(turkish_exchange.get_xlm_bid() - european_exchange.get_xlm_ask()*self.curr_converter.get_euro_try_parity()) + ' TRY'+
+        '\nXlm which can be bought with the capital of '+ str(self.capital) + ' EUR is ' + str(self.capital) + ' / ' + str(european_exchange.get_xlm_ask()) + ' = ' + str(coin_amount) +
+        '\nTotal profit for Xlm arbitrage is ' + str(coin_amount) + ' * ' + str(arbitrage) + ' = ' + str(total_profit) + ' TRY' )
         console_drawer.draw(text)
        
 
