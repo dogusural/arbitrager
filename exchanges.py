@@ -5,6 +5,8 @@ class exchange:
         self.bid_prices= dict()
         self.ask_prices= dict()
         self.name = exchange_name
+        self.maker_fee = 0
+        self.taker_fee = 0
     def refresh(self):
         response = requests.get(self.exchange_ticker)
         resp_json = json.loads(response.text)
@@ -36,6 +38,12 @@ class exchange:
     def get_ask_prices(self,response_json:dict):
         pass
 
+    def get_maker_fee(self):
+        return self.maker_fee
+    def get_taker_fee(self):
+        return self.taker_fee
+
+
 
 import requests,json
 
@@ -44,6 +52,8 @@ import requests,json
 class PARIBU(exchange):
     def __init__(self,exchange_url:str = 'https://www.paribu.com/ticker'):
         super().__init__(exchange_url,"PARIBU")
+        self.maker_fee = (0.25 / 100)
+        self.taker_fee = (0.35 / 100)
     def refresh(self):
         super().refresh()
     def get_btc_ask(self):
@@ -95,6 +105,8 @@ class KRAKEN(exchange):
    
     def __init__(self,exchange_url:str = 'https://api.kraken.com/0/public/Ticker?pair=xbteur,xtzeur,linkeur,etheur,adaeur,xlmeur'):
         super().__init__(exchange_url,"KRAKEN")
+        self.maker_fee = (0.16 / 100)
+        self.taker_fee = (0.26 / 100)
     def refresh(self):
         super().refresh()
     def get_btc_ask(self):

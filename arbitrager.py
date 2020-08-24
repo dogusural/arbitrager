@@ -30,8 +30,8 @@ class EuropeantoTurkishArbitrager:
     def calculate_btc_arbitrage(self,turkish_exchange:exchanges.exchange, european_exchange:exchanges.exchange):
 
         arbitrage = (turkish_exchange.get_btc_bid() - european_exchange.get_btc_ask()*self.curr_converter.get_euro_try_parity())
-        coin_amount = (self.capital / european_exchange.get_btc_ask())
-        total_profit = coin_amount * arbitrage
+        coin_amount = ((self.capital - (european_exchange.get_maker_fee() * self.capital) ) / european_exchange.get_btc_ask())
+        total_profit = coin_amount * arbitrage - ( coin_amount * turkish_exchange.get_btc_bid() * turkish_exchange.get_maker_fee() )
 
         text = ('Bitcoin bid price on '+ turkish_exchange.get_name() +  ' is ' + str(turkish_exchange.get_btc_bid()) + ' TRY' +
         '\nBitcoin ask price on ' + european_exchange.get_name() + ' is ' + str(european_exchange.get_btc_ask()) + ' EUR' +
@@ -46,8 +46,8 @@ class EuropeantoTurkishArbitrager:
     def calculate_eth_arbitrage(self,turkish_exchange:exchanges.exchange, european_exchange:exchanges.exchange):
 
         arbitrage = (turkish_exchange.get_eth_bid() - european_exchange.get_eth_ask()*self.curr_converter.get_euro_try_parity())
-        coin_amount = (self.capital / european_exchange.get_eth_ask())
-        total_profit = coin_amount * arbitrage
+        coin_amount = ((self.capital - (european_exchange.get_maker_fee() * self.capital) ) / european_exchange.get_eth_ask())
+        total_profit = coin_amount * arbitrage - ( coin_amount * turkish_exchange.get_eth_bid() * turkish_exchange.get_maker_fee() )
 
         text = ('Ethereum bid price on '+ turkish_exchange.get_name() +  ' is ' + str(turkish_exchange.get_eth_bid())  + ' TRY' +
         '\nEthereum ask price on ' + european_exchange.get_name() + ' is ' + str(european_exchange.get_eth_ask()) + ' EUR' +
@@ -62,8 +62,8 @@ class EuropeantoTurkishArbitrager:
     def calculate_xtz_arbitrage(self,turkish_exchange:exchanges.exchange, european_exchange:exchanges.exchange):
 
         arbitrage = (turkish_exchange.get_xtz_bid() - european_exchange.get_xtz_ask()*self.curr_converter.get_euro_try_parity())
-        coin_amount = (self.capital / european_exchange.get_xtz_ask())
-        total_profit = coin_amount * arbitrage
+        coin_amount = ((self.capital - (european_exchange.get_maker_fee() * self.capital) ) / european_exchange.get_xtz_ask())
+        total_profit = coin_amount * arbitrage - ( coin_amount * turkish_exchange.get_xtz_bid() * turkish_exchange.get_maker_fee() )
 
         text = ('Tezos bid price on '+ turkish_exchange.get_name() +  ' is ' + str(turkish_exchange.get_xtz_bid())  + ' TRY' +
         '\nTezos ask price on ' + european_exchange.get_name() + ' is ' + str(european_exchange.get_xtz_ask()) + ' EUR' +
@@ -78,8 +78,8 @@ class EuropeantoTurkishArbitrager:
     def calculate_link_arbitrage(self,turkish_exchange:exchanges.exchange, european_exchange:exchanges.exchange):
 
         arbitrage = (turkish_exchange.get_link_bid() - european_exchange.get_link_ask()*self.curr_converter.get_euro_try_parity())
-        coin_amount = (self.capital / european_exchange.get_link_ask())
-        total_profit = coin_amount * arbitrage
+        coin_amount = ((self.capital - (european_exchange.get_maker_fee() * self.capital) ) / european_exchange.get_link_ask())
+        total_profit = coin_amount * arbitrage - ( coin_amount * turkish_exchange.get_link_bid() * turkish_exchange.get_maker_fee() )
 
         text = ('Link bid price on '+ turkish_exchange.get_name() +  ' is ' + str(turkish_exchange.get_link_bid())  + ' TRY' +
         '\nLink ask price on ' + european_exchange.get_name() + ' is ' + str(european_exchange.get_link_ask()) + ' EUR' +
@@ -94,8 +94,8 @@ class EuropeantoTurkishArbitrager:
     def calculate_ada_arbitrage(self,turkish_exchange:exchanges.exchange, european_exchange:exchanges.exchange):
 
         arbitrage = (turkish_exchange.get_ada_bid() - european_exchange.get_ada_ask()*self.curr_converter.get_euro_try_parity())
-        coin_amount = (self.capital / european_exchange.get_ada_ask())
-        total_profit = coin_amount * arbitrage
+        coin_amount = ((self.capital - (european_exchange.get_maker_fee() * self.capital) ) / european_exchange.get_ada_ask())
+        total_profit = coin_amount * arbitrage - ( coin_amount * turkish_exchange.get_ada_bid() * turkish_exchange.get_maker_fee() )
 
         text = ('Ada bid price on '+ turkish_exchange.get_name() +  ' is ' + str(turkish_exchange.get_ada_bid())  + ' TRY' +
         '\nAda ask price on ' + european_exchange.get_name() + ' is ' + str(european_exchange.get_ada_ask()) + ' EUR' +
@@ -110,8 +110,8 @@ class EuropeantoTurkishArbitrager:
     def calculate_xlm_arbitrage(self,turkish_exchange:exchanges.exchange, european_exchange:exchanges.exchange):
 
         arbitrage = (turkish_exchange.get_ada_bid() - european_exchange.get_ada_ask()*self.curr_converter.get_euro_try_parity())
-        coin_amount = (self.capital / european_exchange.get_ada_ask())
-        total_profit = coin_amount * arbitrage
+        coin_amount = ( (self.capital - (european_exchange.get_maker_fee() * self.capital) ) / european_exchange.get_ada_ask())
+        total_profit = (coin_amount * arbitrage) - ( coin_amount * turkish_exchange.get_xlm_bid() * turkish_exchange.get_maker_fee() )
 
         text = ('Xlm bid price on '+ turkish_exchange.get_name() +  ' is ' + str(turkish_exchange.get_xlm_bid())  + ' TRY' +
         '\nXlm ask price on ' + european_exchange.get_name() + ' is ' + str(european_exchange.get_xlm_ask()) + ' EUR' +
