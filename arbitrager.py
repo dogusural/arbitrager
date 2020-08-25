@@ -109,8 +109,8 @@ class EuropeantoTurkishArbitrager:
 
     def calculate_xlm_arbitrage(self,turkish_exchange:exchanges.exchange, european_exchange:exchanges.exchange):
 
-        arbitrage = (turkish_exchange.get_ada_bid() - european_exchange.get_ada_ask()*self.curr_converter.get_euro_try_parity())
-        coin_amount = ( (self.capital - (european_exchange.get_maker_fee() * self.capital) ) / european_exchange.get_ada_ask())
+        arbitrage = (turkish_exchange.get_xlm_bid() - european_exchange.get_xlm_ask()*self.curr_converter.get_euro_try_parity())
+        coin_amount = ( (self.capital - (european_exchange.get_maker_fee() * self.capital) ) / european_exchange.get_xlm_ask())
         total_profit = (coin_amount * arbitrage) - ( coin_amount * turkish_exchange.get_xlm_bid() * turkish_exchange.get_maker_fee() )
 
         text = ('Xlm bid price on '+ turkish_exchange.get_name() +  ' is ' + str(turkish_exchange.get_xlm_bid())  + ' TRY' +
