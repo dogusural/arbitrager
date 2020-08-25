@@ -30,8 +30,10 @@ class EuropeantoTurkishArbitrager:
     def calculate_btc_arbitrage(self,turkish_exchange:exchanges.exchange, european_exchange:exchanges.exchange):
 
         arbitrage = (turkish_exchange.get_btc_bid() - european_exchange.get_btc_ask()*self.curr_converter.get_euro_try_parity())
-        coin_amount = ((self.capital - (european_exchange.get_maker_fee() * self.capital) ) / european_exchange.get_btc_ask())
-        total_profit = coin_amount * arbitrage - ( coin_amount * turkish_exchange.get_btc_bid() * turkish_exchange.get_maker_fee() )
+        buy_exchange_fee = (european_exchange.get_maker_fee() * self.capital )
+        coin_amount = (( self.capital - buy_exchange_fee  ) / european_exchange.get_btc_ask())
+        sell_exchange_fee = coin_amount * turkish_exchange.get_btc_bid() * turkish_exchange.get_maker_fee()
+        total_profit = coin_amount * arbitrage - sell_exchange_fee
 
         text = ('Bitcoin bid price on '+ turkish_exchange.get_name() +  ' is ' + str(turkish_exchange.get_btc_bid()) + ' TRY' +
         '\nBitcoin ask price on ' + european_exchange.get_name() + ' is ' + str(european_exchange.get_btc_ask()) + ' EUR' +
@@ -40,6 +42,7 @@ class EuropeantoTurkishArbitrager:
         ' = '+ str(european_exchange.get_btc_ask()*self.curr_converter.get_euro_try_parity()) + ' TRY' +
         '\nArbitrage margin for Bitcoin is ' + str(arbitrage) + ' TRY' +
         '\nBitcoin which can be bought with the capital of '+ str(self.capital) + ' EUR is ' + str(self.capital) + ' / ' + str(european_exchange.get_btc_ask()) + ' = ' + str(coin_amount) +
+        '\nFees for ' +  european_exchange.get_name() + ' = ' + str(buy_exchange_fee * self.curr_converter.get_euro_try_parity() ) + ' TRY. Fees for ' +  turkish_exchange.get_name() + ' = ' + str(sell_exchange_fee) +' TRY'+
         '\nTotal profit for Bitcoin arbitrage is ' + str(coin_amount) + ' * ' + str(arbitrage) + ' = ' + str(total_profit) + ' TRY' )
         console_drawer.draw(text)
         
