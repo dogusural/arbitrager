@@ -6,7 +6,7 @@ class console_drawer:
     @staticmethod
     def draw(text:str,file:str=None):
         table = [[text]]
-        output = tabulate(table, tablefmt='grid')
+        output = tabulate(table, tablefmt='fancy_grid')
         console_drawer.smart_print(output,file)
     @staticmethod
     def smart_print(text:str,filename:str=None):
