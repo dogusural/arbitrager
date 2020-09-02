@@ -3,6 +3,7 @@ import sys
 
 
 class console_drawer:
+    
     @staticmethod
     def draw(text:str,file:str=None):
         table = [[text]]
@@ -20,3 +21,16 @@ class console_drawer:
         finally:
             if fh is not sys.stdout:
                 fh.close()
+    @staticmethod
+    def indent(txt, spaces=40):
+        return "\n".join(" "*spaces + ln for ln in txt.splitlines())
+    @staticmethod
+    def draw_header(header0:str,header1:str):
+
+        W  = '\033[0m'  # white (normal)
+        R  = '\033[31m' # red
+        G  = '\033[32m' # green
+        O  = '\033[33m' # orange
+        B  = '\033[34m' # blue
+        P  = '\033[35m' # purple
+        print(console_drawer.indent(tabulate([[G + header0 +'      '+ R + header1 + W ]] ,tablefmt='fancy_grid' )))

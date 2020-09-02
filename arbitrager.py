@@ -20,6 +20,7 @@ class EuropeantoTurkishArbitrager:
         self.refresh()
         for turkish_exchange in self.turkish_exchanges:
             for european_exchange in self.european_exchanges:
+                console_drawer.draw_header(european_exchange.get_name(),turkish_exchange.get_name())
                 self.calculate_btc_arbitrage(turkish_exchange,european_exchange)
                 self.calculate_eth_arbitrage(turkish_exchange,european_exchange)
                 self.calculate_xtz_arbitrage(turkish_exchange,european_exchange)
