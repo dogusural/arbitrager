@@ -42,7 +42,7 @@ class EuropeantoTurkishArbitrager:
         ' = '+ str(european_coin.get_ask()*self.curr_converter.get_euro_try_parity()) + ' TRY' +
         '\nArbitrage margin for ' + turkish_coin.get_name() + ' is ' + str(arbitrage) + ' TRY' +
         '\n' + turkish_coin.get_name() + ' which can be bought with the capital of '+ str(self.capital) + ' EUR is ' + str(self.capital) + ' / ' + str(european_coin.get_ask()) + ' = ' + str(coin_amount) +
-        '\nFees for ' +  european_exchange.get_name() + ' = ' + str(buy_exchange_fee * self.curr_converter.get_euro_try_parity() ) + ' TRY. Fees for ' +  turkish_coin.get_name() + ' = ' + str(sell_exchange_fee) +' TRY'+
+        '\nFees for ' +  european_exchange.get_name() + ' = ' + str(buy_exchange_fee * self.curr_converter.get_euro_try_parity() ) + ' TRY. Fees for ' +  turkish_exchange.get_name() + ' = ' + str(sell_exchange_fee) +' TRY'+
         '\nTotal profit for ' + turkish_coin.get_name() + ' arbitrage is ' + str(coin_amount) + ' * ' + str(arbitrage) + ' = ' + str(total_profit) + ' TRY' )
         console_drawer.draw(text)
 
