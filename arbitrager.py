@@ -1,5 +1,6 @@
 import euro_oracles,exchanges
 from draw import console_drawer
+import coins
 
 
 
@@ -21,129 +22,29 @@ class EuropeantoTurkishArbitrager:
         for turkish_exchange in self.turkish_exchanges:
             for european_exchange in self.european_exchanges:
                 console_drawer.draw_header(european_exchange.get_name(),turkish_exchange.get_name())
-                self.calculate_btc_arbitrage(turkish_exchange,european_exchange)
-                self.calculate_eth_arbitrage(turkish_exchange,european_exchange)
-                self.calculate_xtz_arbitrage(turkish_exchange,european_exchange)
-                self.calculate_link_arbitrage(turkish_exchange,european_exchange)
-                self.calculate_atom_arbitrage(turkish_exchange,european_exchange)
-                self.calculate_xlm_arbitrage(turkish_exchange,european_exchange)
+                for (T,E) in zip(turkish_exchange.get_supported_coins(), european_exchange.get_supported_coins()):
+                    if T is not None and E is not None :
+                        self.display_arbitrage(turkish_exchange,european_exchange,T,E)
+                   
 
-    def calculate_btc_arbitrage(self,turkish_exchange:exchanges.exchange, european_exchange:exchanges.exchange):
+    def display_arbitrage(self,turkish_exchange:exchanges.exchange, european_exchange:exchanges.exchange, turkish_coin:coins.cryptocurrency, european_coin:coins.cryptocurrency):
 
-        arbitrage = (turkish_exchange.get_btc_bid() - european_exchange.get_btc_ask()*self.curr_converter.get_euro_try_parity())
+        arbitrage = (turkish_coin.get_bid() - european_coin.get_ask()*self.curr_converter.get_euro_try_parity())
         buy_exchange_fee = (european_exchange.get_maker_fee() * self.capital )
-        coin_amount = (( self.capital - buy_exchange_fee  ) / european_exchange.get_btc_ask())
-        sell_exchange_fee = coin_amount * turkish_exchange.get_btc_bid() * turkish_exchange.get_maker_fee()
+        coin_amount = (( self.capital - buy_exchange_fee  ) / european_coin.get_ask())
+        sell_exchange_fee = coin_amount * turkish_coin.get_bid() * turkish_exchange.get_maker_fee()
         total_profit = coin_amount * arbitrage - sell_exchange_fee
 
-        text = ('Bitcoin bid price on '+ turkish_exchange.get_name() +  ' is ' + str(turkish_exchange.get_btc_bid()) + ' TRY' +
-        '\nBitcoin ask price on ' + european_exchange.get_name() + ' is ' + str(european_exchange.get_btc_ask()) + ' EUR' +
+        text = ( turkish_coin.get_name() + ' bid price on '+ turkish_exchange.get_name() +  ' is ' + str(turkish_coin.get_bid()) + ' TRY' +
+        '\n' + turkish_coin.get_name() + ' ask price on ' + european_exchange.get_name() + ' is ' + str(european_coin.get_ask()) + ' EUR' +
         '\nEURO/TRY parity is ' + str(self.curr_converter.get_euro_try_parity()) +'\n'+ european_exchange.get_name() +
-        ' Bitcoin price in TRY is ' + str(european_exchange.get_btc_ask()) + ' * ' + str(self.curr_converter.get_euro_try_parity()) +
-        ' = '+ str(european_exchange.get_btc_ask()*self.curr_converter.get_euro_try_parity()) + ' TRY' +
-        '\nArbitrage margin for Bitcoin is ' + str(arbitrage) + ' TRY' +
-        '\nBitcoin which can be bought with the capital of '+ str(self.capital) + ' EUR is ' + str(self.capital) + ' / ' + str(european_exchange.get_btc_ask()) + ' = ' + str(coin_amount) +
-        '\nFees for ' +  european_exchange.get_name() + ' = ' + str(buy_exchange_fee * self.curr_converter.get_euro_try_parity() ) + ' TRY. Fees for ' +  turkish_exchange.get_name() + ' = ' + str(sell_exchange_fee) +' TRY'+
-        '\nTotal profit for Bitcoin arbitrage is ' + str(coin_amount) + ' * ' + str(arbitrage) + ' = ' + str(total_profit) + ' TRY' )
+        ' ' + turkish_coin.get_name() + ' price in TRY is ' + str(european_coin.get_ask()) + ' * ' + str(self.curr_converter.get_euro_try_parity()) +
+        ' = '+ str(european_coin.get_ask()*self.curr_converter.get_euro_try_parity()) + ' TRY' +
+        '\nArbitrage margin for ' + turkish_coin.get_name() + ' is ' + str(arbitrage) + ' TRY' +
+        '\n' + turkish_coin.get_name() + ' which can be bought with the capital of '+ str(self.capital) + ' EUR is ' + str(self.capital) + ' / ' + str(european_coin.get_ask()) + ' = ' + str(coin_amount) +
+        '\nFees for ' +  european_exchange.get_name() + ' = ' + str(buy_exchange_fee * self.curr_converter.get_euro_try_parity() ) + ' TRY. Fees for ' +  turkish_coin.get_name() + ' = ' + str(sell_exchange_fee) +' TRY'+
+        '\nTotal profit for ' + turkish_coin.get_name() + ' arbitrage is ' + str(coin_amount) + ' * ' + str(arbitrage) + ' = ' + str(total_profit) + ' TRY' )
         console_drawer.draw(text)
-        
-    def calculate_eth_arbitrage(self,turkish_exchange:exchanges.exchange, european_exchange:exchanges.exchange):
-
-        arbitrage = (turkish_exchange.get_eth_bid() - european_exchange.get_eth_ask()*self.curr_converter.get_euro_try_parity())
-        buy_exchange_fee = (european_exchange.get_maker_fee() * self.capital )
-        coin_amount = ((self.capital - buy_exchange_fee) / european_exchange.get_eth_ask())
-        sell_exchange_fee = coin_amount * turkish_exchange.get_eth_bid() * turkish_exchange.get_maker_fee()
-        total_profit = coin_amount * arbitrage - sell_exchange_fee
-
-        text = ('Ethereum bid price on '+ turkish_exchange.get_name() +  ' is ' + str(turkish_exchange.get_eth_bid())  + ' TRY' +
-        '\nEthereum ask price on ' + european_exchange.get_name() + ' is ' + str(european_exchange.get_eth_ask()) + ' EUR' +
-        '\nEURO/TRY parity is ' + str(self.curr_converter.get_euro_try_parity()) +'\n'+ european_exchange.get_name() +
-        ' Ethereum price in TRY is ' + str(european_exchange.get_eth_ask()) + ' * ' + str(self.curr_converter.get_euro_try_parity()) +
-        ' = '+ str(european_exchange.get_eth_ask()*self.curr_converter.get_euro_try_parity()) + ' TRY' +
-        '\nArbitrage margin for Ethereum is ' + str(arbitrage) + ' TRY'+
-        '\nEthereum which can be bought with the capital of '+ str(self.capital) + ' EUR is ' + str(self.capital) + ' / ' + str(european_exchange.get_eth_ask()) + ' = ' + str(coin_amount) +
-        '\nFees for ' +  european_exchange.get_name() + ' = ' + str(buy_exchange_fee * self.curr_converter.get_euro_try_parity() ) + ' TRY. Fees for ' +  turkish_exchange.get_name() + ' = ' + str(sell_exchange_fee) +' TRY'+
-        '\nTotal profit for Ethereum arbitrage is ' + str(coin_amount) + ' * ' + str(arbitrage) + ' = ' + str(total_profit) + ' TRY' )
-        console_drawer.draw(text)
-
-    def calculate_xtz_arbitrage(self,turkish_exchange:exchanges.exchange, european_exchange:exchanges.exchange):
-
-        arbitrage = (turkish_exchange.get_xtz_bid() - european_exchange.get_xtz_ask()*self.curr_converter.get_euro_try_parity())
-        buy_exchange_fee = (european_exchange.get_maker_fee() * self.capital )
-        coin_amount = ((self.capital - (european_exchange.get_maker_fee() * self.capital) ) / european_exchange.get_xtz_ask())
-        sell_exchange_fee = coin_amount * turkish_exchange.get_xtz_bid() * turkish_exchange.get_maker_fee()
-        total_profit = coin_amount * arbitrage - sell_exchange_fee
-
-        text = ('Tezos bid price on '+ turkish_exchange.get_name() +  ' is ' + str(turkish_exchange.get_xtz_bid())  + ' TRY' +
-        '\nTezos ask price on ' + european_exchange.get_name() + ' is ' + str(european_exchange.get_xtz_ask()) + ' EUR' +
-        '\nEURO/TRY parity is ' + str(self.curr_converter.get_euro_try_parity()) +'\n'+ european_exchange.get_name() +
-        ' Tezos price in TRY is ' + str(european_exchange.get_xtz_ask()) + ' * ' + str(self.curr_converter.get_euro_try_parity()) +
-        ' = '+ str(european_exchange.get_xtz_ask()*self.curr_converter.get_euro_try_parity()) + ' TRY' +
-        '\nArbitrage margin for Tezos is ' + str(arbitrage) + ' TRY'+
-        '\nTezos which can be bought with the capital of '+ str(self.capital) + ' EUR is ' + str(self.capital) + ' / ' + str(european_exchange.get_xtz_ask()) + ' = ' + str(coin_amount) +
-        '\nFees for ' +  european_exchange.get_name() + ' = ' + str(buy_exchange_fee * self.curr_converter.get_euro_try_parity() ) + ' TRY. Fees for ' +  turkish_exchange.get_name() + ' = ' + str(sell_exchange_fee) +' TRY'+
-        '\nTotal profit for Tezos arbitrage is ' + str(coin_amount) + ' * ' + str(arbitrage) + ' = ' + str(total_profit) + ' TRY' )
-        console_drawer.draw(text)
-
-    def calculate_link_arbitrage(self,turkish_exchange:exchanges.exchange, european_exchange:exchanges.exchange):
-
-        arbitrage = (turkish_exchange.get_link_bid() - european_exchange.get_link_ask()*self.curr_converter.get_euro_try_parity())
-        buy_exchange_fee = (european_exchange.get_maker_fee() * self.capital )
-        coin_amount = ((self.capital - (european_exchange.get_maker_fee() * self.capital) ) / european_exchange.get_link_ask())
-        sell_exchange_fee = coin_amount * turkish_exchange.get_link_bid() * turkish_exchange.get_maker_fee()
-        total_profit = coin_amount * arbitrage - sell_exchange_fee
-
-        text = ('Link bid price on '+ turkish_exchange.get_name() +  ' is ' + str(turkish_exchange.get_link_bid())  + ' TRY' +
-        '\nLink ask price on ' + european_exchange.get_name() + ' is ' + str(european_exchange.get_link_ask()) + ' EUR' +
-        '\nEURO/TRY parity is ' + str(self.curr_converter.get_euro_try_parity()) +'\n'+ european_exchange.get_name() +
-        ' Link price in TRY is ' + str(european_exchange.get_link_ask()) + ' * ' + str(self.curr_converter.get_euro_try_parity()) +
-        ' = '+ str(european_exchange.get_link_ask()*self.curr_converter.get_euro_try_parity()) + ' TRY' +
-        '\nArbitrage margin for Link is ' + str(turkish_exchange.get_link_bid() - european_exchange.get_link_ask()*self.curr_converter.get_euro_try_parity()) + ' TRY'+
-        '\nLink which can be bought with the capital of '+ str(self.capital) + ' EUR is ' + str(self.capital) + ' / ' + str(european_exchange.get_link_ask()) + ' = ' + str(coin_amount) +
-        '\nFees for ' +  european_exchange.get_name() + ' = ' + str(buy_exchange_fee * self.curr_converter.get_euro_try_parity() ) + ' TRY. Fees for ' +  turkish_exchange.get_name() + ' = ' + str(sell_exchange_fee) +' TRY'+
-        '\nTotal profit for link arbitrage is ' + str(coin_amount) + ' * ' + str(arbitrage) + ' = ' + str(total_profit) + ' TRY' )
-        console_drawer.draw(text)
-
-    def calculate_atom_arbitrage(self,turkish_exchange:exchanges.exchange, european_exchange:exchanges.exchange):
-
-        arbitrage = (turkish_exchange.get_atom_bid() - european_exchange.get_atom_ask()*self.curr_converter.get_euro_try_parity())
-        buy_exchange_fee = (european_exchange.get_maker_fee() * self.capital )
-        coin_amount = ((self.capital - (european_exchange.get_maker_fee() * self.capital) ) / european_exchange.get_atom_ask())
-        sell_exchange_fee = coin_amount * turkish_exchange.get_atom_bid() * turkish_exchange.get_maker_fee()
-        total_profit = coin_amount * arbitrage - sell_exchange_fee
-
-        text = ('Atom bid price on '+ turkish_exchange.get_name() +  ' is ' + str(turkish_exchange.get_atom_bid())  + ' TRY' +
-        '\nAtom ask price on ' + european_exchange.get_name() + ' is ' + str(european_exchange.get_atom_ask()) + ' EUR' +
-        '\nEURO/TRY parity is ' + str(self.curr_converter.get_euro_try_parity()) +'\n'+ european_exchange.get_name() +
-        ' Atom price in TRY is ' + str(european_exchange.get_atom_ask()) + ' * ' + str(self.curr_converter.get_euro_try_parity()) +
-        ' = '+ str(european_exchange.get_atom_ask()*self.curr_converter.get_euro_try_parity()) + ' TRY' +
-        '\nArbitrage margin for Atom is ' + str(turkish_exchange.get_atom_bid() - european_exchange.get_atom_ask()*self.curr_converter.get_euro_try_parity()) + ' TRY'+
-        '\nAtom which can be bought with the capital of '+ str(self.capital) + ' EUR is ' + str(self.capital) + ' / ' + str(european_exchange.get_atom_ask()) + ' = ' + str(coin_amount) +
-        '\nFees for ' +  european_exchange.get_name() + ' = ' + str(buy_exchange_fee * self.curr_converter.get_euro_try_parity() ) + ' TRY. Fees for ' +  turkish_exchange.get_name() + ' = ' + str(sell_exchange_fee) +' TRY'+
-        '\nTotal profit for Atom arbitrage is ' + str(coin_amount) + ' * ' + str(arbitrage) + ' = ' + str(total_profit) + ' TRY' )
-        console_drawer.draw(text)
-
-    def calculate_xlm_arbitrage(self,turkish_exchange:exchanges.exchange, european_exchange:exchanges.exchange):
-
-        arbitrage = (turkish_exchange.get_xlm_bid() - european_exchange.get_xlm_ask()*self.curr_converter.get_euro_try_parity())
-        buy_exchange_fee = (european_exchange.get_maker_fee() * self.capital )
-        coin_amount = ( (self.capital - (european_exchange.get_maker_fee() * self.capital) ) / european_exchange.get_xlm_ask())
-        sell_exchange_fee = coin_amount * turkish_exchange.get_xlm_bid() * turkish_exchange.get_maker_fee()
-        total_profit = coin_amount * arbitrage - sell_exchange_fee
-
-        text = ('Xlm bid price on '+ turkish_exchange.get_name() +  ' is ' + str(turkish_exchange.get_xlm_bid())  + ' TRY' +
-        '\nXlm ask price on ' + european_exchange.get_name() + ' is ' + str(european_exchange.get_xlm_ask()) + ' EUR' +
-        '\nEURO/TRY parity is ' + str(self.curr_converter.get_euro_try_parity()) +'\n'+ european_exchange.get_name() +
-        ' Xlm price in TRY is ' + str(european_exchange.get_xlm_ask()) + ' * ' + str(self.curr_converter.get_euro_try_parity()) +
-        ' = '+ str(european_exchange.get_xlm_ask()*self.curr_converter.get_euro_try_parity()) + ' TRY' +
-        '\nArbitrage margin for Xlm is ' + str(turkish_exchange.get_xlm_bid() - european_exchange.get_xlm_ask()*self.curr_converter.get_euro_try_parity()) + ' TRY'+
-        '\nXlm which can be bought with the capital of '+ str(self.capital) + ' EUR is ' + str(self.capital) + ' / ' + str(european_exchange.get_xlm_ask()) + ' = ' + str(coin_amount) +
-        '\nFees for ' +  european_exchange.get_name() + ' = ' + str(buy_exchange_fee * self.curr_converter.get_euro_try_parity() ) + ' TRY. Fees for ' +  turkish_exchange.get_name() + ' = ' + str(sell_exchange_fee) +' TRY'+
-        '\nTotal profit for Xlm arbitrage is ' + str(coin_amount) + ' * ' + str(arbitrage) + ' = ' + str(total_profit) + ' TRY' )
-        console_drawer.draw(text)
-       
-
-
 
 
 def main():
