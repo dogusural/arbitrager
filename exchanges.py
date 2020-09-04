@@ -13,6 +13,7 @@ class exchange:
         self.link = None
         self.stellar = None
         self.cosmos = None
+        self.usdt = None
 
     def populate_coin_list(self):
         self.supported_coins.append(self.bitcoin)
@@ -21,6 +22,7 @@ class exchange:
         self.supported_coins.append(self.link)
         self.supported_coins.append(self.stellar)
         self.supported_coins.append(self.cosmos)
+        self.supported_coins.append(self.usdt)
 
     def get_supported_coins(self):
         return self.supported_coins
@@ -62,6 +64,7 @@ class PARIBU(exchange):
         self.link = coins.Link(0)
         self.stellar = coins.Stellar(0)
         self.cosmos = coins.Cosmos(0)
+        self.usdt = coins.USDT(0)
         self.populate_coin_list()
 
     def get_supported_coins(self):
@@ -80,6 +83,7 @@ class PARIBU(exchange):
         self.link.set_bid(float(response_json['LINK_TL']['highestBid']))
         self.stellar.set_bid(float(response_json['XLM_TL']['highestBid']))
         self.cosmos.set_bid(float(response_json['ATOM_TL']['highestBid']))
+        self.usdt.set_bid(float(response_json['USDT_TL']['highestBid']))
 
     def get_ask_prices(self,response_json:dict):
         self.bitcoin.set_ask(float(response_json['BTC_TL']['lowestAsk']))
@@ -88,6 +92,7 @@ class PARIBU(exchange):
         self.link.set_ask(float(response_json['LINK_TL']['lowestAsk']))
         self.stellar.set_ask(float(response_json['XLM_TL']['lowestAsk']))
         self.cosmos.set_ask(float(response_json['ATOM_TL']['lowestAsk']))
+        self.usdt.set_ask(float(response_json['USDT_TL']['highestBid']))
 
 
 
@@ -102,6 +107,7 @@ class BTCTURK(exchange):
         self.link = coins.Link(0)
         self.stellar = coins.Stellar(0)
         self.cosmos = coins.Cosmos(0)
+        self.usdt = coins.USDT(0)
         self.populate_coin_list()
 
     def get_supported_coins(self):
@@ -120,6 +126,7 @@ class BTCTURK(exchange):
         self.ethereum.set_bid(float(response_json['data'][3]['bid']))
         self.cosmos.set_bid(float(response_json['data'][10]['bid']))
         self.stellar.set_bid(float(response_json['data'][8]['bid']))
+        self.usdt.set_bid(float(response_json['data'][7]['bid']))
 
     def get_ask_prices(self,response_json:dict):
         self.bitcoin.set_ask(float(response_json['data'][0]['ask']))
@@ -128,11 +135,12 @@ class BTCTURK(exchange):
         self.ethereum.set_ask(float(response_json['data'][3]['ask']))
         self.cosmos.set_ask(float(response_json['data'][10]['ask']))
         self.stellar.set_ask(float(response_json['data'][8]['ask']))
+        self.usdt.set_ask(float(response_json['data'][7]['ask']))
 
 
 class KRAKEN(exchange):
    
-    def __init__(self,exchange_url:str = 'https://api.kraken.com/0/public/Ticker?pair=xbteur,xtzeur,linkeur,etheur,atomeur,xlmeur'):
+    def __init__(self,exchange_url:str = 'https://api.kraken.com/0/public/Ticker?pair=xbteur,xtzeur,linkeur,etheur,atomeur,xlmeur,usdteur'):
         super().__init__(exchange_url,"KRAKEN")
         self.maker_fee = (0.16 / 100)
         self.taker_fee = (0.26 / 100)
@@ -142,6 +150,7 @@ class KRAKEN(exchange):
         self.link = coins.Link(0.12)
         self.stellar = coins.Stellar(0.00002)
         self.cosmos = coins.Cosmos(0.1)
+        self.usdt = coins.USDT(5)
         self.populate_coin_list()
 
     def get_supported_coins(self):
@@ -160,6 +169,7 @@ class KRAKEN(exchange):
         self.ethereum.set_bid(float(response_json['result']['XETHZEUR']['b'][0]))
         self.cosmos.set_bid(float(response_json['result']['ATOMEUR']['b'][0]))
         self.stellar.set_bid(float(response_json['result']['XXLMZEUR']['b'][0]))
+        self.usdt.set_bid(float(response_json['result']['USDTEUR']['b'][0]))
     def get_ask_prices(self,response_json:dict):
         self.bitcoin.set_ask(float(response_json['result']['XXBTZEUR']['a'][0]))
         self.tezos.set_ask(float(response_json['result']['XTZEUR']['a'][0]))
@@ -167,6 +177,7 @@ class KRAKEN(exchange):
         self.ethereum.set_ask(float(response_json['result']['XETHZEUR']['a'][0]))
         self.cosmos.set_ask(float(response_json['result']['ATOMEUR']['a'][0]))
         self.stellar.set_ask(float(response_json['result']['XXLMZEUR']['a'][0]))
+        self.usdt.set_ask(float(response_json['result']['USDTEUR']['b'][0]))
 
 
 class exchange_aggregator:

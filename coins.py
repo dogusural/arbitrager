@@ -45,4 +45,8 @@ class Cosmos(cryptocurrency):
 class Stellar(cryptocurrency):
     def __init__(self,withdraw_fee:float):
         super().__init__("Stellar",withdraw_fee)
+
+class USDT(cryptocurrency):
+    def __init__(self,withdraw_fee:float):
+        super().__init__("USDT",withdraw_fee)
     

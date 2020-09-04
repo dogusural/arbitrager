@@ -7,7 +7,7 @@ import coins
 class EuropeantoTurkishArbitrager:
     def __init__(self,capital_in_euros:int):
         self.capital = capital_in_euros
-        self.curr_converter = euro_oracles.currconv()
+        self.curr_converter = euro_oracles.exchangeratesapi()
         self.aggregator = exchanges.exchange_aggregator()
         self.turkish_exchanges = self.aggregator.get_turkish_exchanges_list()
         self.european_exchanges = self.aggregator.get_european_exchanges_list()
