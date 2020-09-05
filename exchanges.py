@@ -179,14 +179,49 @@ class KRAKEN(exchange):
         self.stellar.set_ask(float(response_json['result']['XXLMZEUR']['a'][0]))
         self.usdt.set_ask(float(response_json['result']['USDTEUR']['b'][0]))
 
+class BINANCE(exchange):
+
+    def __init__(self,exchange_url:str = 'https://api.binance.com/api/v3/ticker/bookTicker'):
+        super().__init__(exchange_url,"BINANCE")
+        self.maker_fee = (0.10 / 100)
+        self.taker_fee = (0.10 / 100)
+        self.bitcoin = coins.Bitcoin(0.0004)
+        self.ethereum = coins.Ethereum(0.008)
+        self.populate_coin_list()
+
+    def get_supported_coins(self):
+        return super().get_supported_coins()
+
+    def populate_coin_list(self):
+        super().populate_coin_list()
+
+    def refresh(self):
+        super().refresh()
+
+    def get_bid_prices(self,response_json:dict):
+        for coin_dictionary in response_json:
+            if coin_dictionary['symbol'] == 'BTCEUR':
+                self.bitcoin.set_bid(float(coin_dictionary['bidPrice']))
+            if coin_dictionary['symbol'] == 'ETHEUR' :
+                self.ethereum.set_bid(float(coin_dictionary['bidPrice']))
+
+    def get_ask_prices(self,response_json:dict):
+        for coin_dictionary in response_json:
+            if coin_dictionary['symbol'] == 'BTCEUR':
+                self.bitcoin.set_ask(float(coin_dictionary['askPrice']))
+            if coin_dictionary['symbol'] == 'ETHEUR' :
+                self.ethereum.set_ask(float(coin_dictionary['askPrice']))
+
 
 class exchange_aggregator:
     def __init__(self):
         self.paribu = PARIBU()
         self.kraken = KRAKEN()
         self.btcturk = BTCTURK()
+        self.binance = BINANCE()
         self.euro_exchange_list= [
             self.kraken,
+            self.binance
         ]
         self.try_exchange_list= [
             self.paribu,
