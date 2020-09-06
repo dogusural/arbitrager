@@ -3,7 +3,12 @@ import sys
 
 
 class console_drawer:
-    
+    W  = '\033[0m'  # white (normal)
+    R  = '\033[31m' # red
+    G  = '\033[32m' # green
+    O  = '\033[33m' # orange
+    B  = '\033[34m' # blue
+    P  = '\033[35m' # purple
     @staticmethod
     def draw(text:str,file:str=None):
         table = [[text]]
@@ -26,11 +31,4 @@ class console_drawer:
         return "\n".join(" "*spaces + ln for ln in txt.splitlines())
     @staticmethod
     def draw_header(header0:str,header1:str):
-
-        W  = '\033[0m'  # white (normal)
-        R  = '\033[31m' # red
-        G  = '\033[32m' # green
-        O  = '\033[33m' # orange
-        B  = '\033[34m' # blue
-        P  = '\033[35m' # purple
-        print(console_drawer.indent(tabulate([[G + header0 +'      '+ R + header1 + W ]] ,tablefmt='fancy_grid' )))
+        print(console_drawer.indent(tabulate([[console_drawer.G + header0 +'      '+ console_drawer.R + header1 + console_drawer.W ]] ,tablefmt='fancy_grid' )))
