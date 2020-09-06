@@ -30,7 +30,7 @@ class EuropeantoTurkishArbitrager:
                         if arbitrage_info[0] > maximum_profit :
                             most_profitable_arbitrage_info = arbitrage_info
                             maximum_profit = arbitrage_info[0]
-        console_drawer.draw_results(most_profitable_arbitrage_info)
+        console_drawer.draw_results(most_profitable_arbitrage_info,self.capital)
                    
 
     def display_arbitrage(self,turkish_exchange:exchanges.exchange, european_exchange:exchanges.exchange, turkish_coin:coins.cryptocurrency, european_coin:coins.cryptocurrency):
