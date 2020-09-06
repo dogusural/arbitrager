@@ -9,6 +9,7 @@ class console_drawer:
     O  = '\033[33m' # orange
     B  = '\033[34m' # blue
     P  = '\033[35m' # purple
+    ARROW = '\u2192'
     @staticmethod
     def draw(text:str,file:str=None):
         table = [[text]]
@@ -32,3 +33,5 @@ class console_drawer:
     @staticmethod
     def draw_header(header0:str,header1:str):
         print(console_drawer.indent(tabulate([[console_drawer.G + header0 +'      '+ console_drawer.R + header1 + console_drawer.W ]] ,tablefmt='fancy_grid' )))
+    def draw_results(result:tuple):
+        print((tabulate([["Most profitable Arbitrage is between " + console_drawer.G + result[2] + " " +  console_drawer.ARROW + " " + result[1] + console_drawer.W + " for " + result[3] + " with the value of " + console_drawer.G +str(result[0]) + " TRY " + console_drawer.W ]] ,tablefmt='fancy_grid' )))

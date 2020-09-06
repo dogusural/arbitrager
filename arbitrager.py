@@ -19,12 +19,18 @@ class EuropeantoTurkishArbitrager:
         self.curr_converter.refresh()
     def calculate_arbitrage(self):
         self.refresh()
+        maximum_profit = 0
+        most_profitable_arbitrage_info = ()
         for turkish_exchange in self.turkish_exchanges:
             for european_exchange in self.european_exchanges:
                 console_drawer.draw_header(european_exchange.get_name(),turkish_exchange.get_name())
                 for (T,E) in zip(turkish_exchange.get_supported_coins(), european_exchange.get_supported_coins()):
                     if T is not None and E is not None :
-                        self.display_arbitrage(turkish_exchange,european_exchange,T,E)
+                        arbitrage_info = self.display_arbitrage(turkish_exchange,european_exchange,T,E)
+                        if arbitrage_info[0] > maximum_profit :
+                            most_profitable_arbitrage_info = arbitrage_info
+                            maximum_profit = arbitrage_info[0]
+        console_drawer.draw_results(most_profitable_arbitrage_info)
                    
 
     def display_arbitrage(self,turkish_exchange:exchanges.exchange, european_exchange:exchanges.exchange, turkish_coin:coins.cryptocurrency, european_coin:coins.cryptocurrency):
@@ -45,6 +51,7 @@ class EuropeantoTurkishArbitrager:
         '\nFees for ' +  european_exchange.get_name() + ' = ' + str(buy_exchange_fee * self.curr_converter.get_euro_try_parity() ) + ' TRY. Fees for ' +  turkish_exchange.get_name() + ' = ' + str(sell_exchange_fee) +' TRY'+
         '\nTotal profit for ' + turkish_coin.get_name() + ' arbitrage is ' + str(coin_amount) + ' * ' + str(arbitrage) + ' = ' + str(total_profit) + ' TRY' )
         console_drawer.draw(text)
+        return (total_profit,turkish_exchange.get_name(),european_exchange.get_name(),turkish_coin.get_name())
 
 
 def main():
