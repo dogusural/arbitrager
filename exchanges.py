@@ -121,21 +121,21 @@ class BTCTURK(exchange):
    
     def get_bid_prices(self,response_json:dict):
         self.bitcoin.set_bid(float(response_json['data'][0]['bid']))
-        self.tezos.set_bid(float(response_json['data'][11]['bid']))
-        self.link.set_bid(float(response_json['data'][4]['bid']))
-        self.ethereum.set_bid(float(response_json['data'][3]['bid']))
-        self.cosmos.set_bid(float(response_json['data'][10]['bid']))
-        self.stellar.set_bid(float(response_json['data'][8]['bid']))
-        self.usdt.set_bid(float(response_json['data'][7]['bid']))
+        self.tezos.set_bid(float(response_json['data'][30]['bid']))
+        self.link.set_bid(float(response_json['data'][24]['bid']))
+        self.ethereum.set_bid(float(response_json['data'][2]['bid']))
+        self.cosmos.set_bid(float(response_json['data'][27]['bid']))
+        self.stellar.set_bid(float(response_json['data'][10]['bid']))
+        self.usdt.set_bid(float(response_json['data'][5]['bid']))
 
     def get_ask_prices(self,response_json:dict):
         self.bitcoin.set_ask(float(response_json['data'][0]['ask']))
-        self.tezos.set_ask(float(response_json['data'][11]['ask']))
-        self.link.set_ask(float(response_json['data'][4]['ask']))
-        self.ethereum.set_ask(float(response_json['data'][3]['ask']))
-        self.cosmos.set_ask(float(response_json['data'][10]['ask']))
-        self.stellar.set_ask(float(response_json['data'][8]['ask']))
-        self.usdt.set_ask(float(response_json['data'][7]['ask']))
+        self.tezos.set_ask(float(response_json['data'][30]['ask']))
+        self.link.set_ask(float(response_json['data'][24]['ask']))
+        self.ethereum.set_ask(float(response_json['data'][2]['ask']))
+        self.cosmos.set_ask(float(response_json['data'][27]['ask']))
+        self.stellar.set_ask(float(response_json['data'][10]['ask']))
+        self.usdt.set_ask(float(response_json['data'][5]['ask']))
 
 
 class KRAKEN(exchange):
