@@ -34,5 +34,9 @@ class console_drawer:
     def draw_header(header0:str,header1:str):
         print(console_drawer.indent(tabulate([[console_drawer.G + header0 +'      '+ console_drawer.R + header1 + console_drawer.W ]] ,tablefmt='fancy_grid' )))
     def draw_results(result:tuple, capital:int):
-        print(console_drawer.indent(tabulate([[console_drawer.G + "RESULTS" + console_drawer.W ]] ,tablefmt='fancy_grid' )))
-        print((tabulate([["For capital of " + console_drawer.G + str(capital) +" Euros, "+ console_drawer.W +" best arbitrage is between " + console_drawer.G + result[2] + " " +  console_drawer.ARROW + " " + result[1] + console_drawer.W + " for " + console_drawer.G + result[3] +  console_drawer.W + " with the value of " + console_drawer.G +str(result[0]) + " TRY " + console_drawer.W ]] ,tablefmt='fancy_grid' )))
+        if  not result:
+            print(console_drawer.indent(tabulate([[console_drawer.G + "RESULTS" + console_drawer.W ]] ,tablefmt='fancy_grid' )))
+            print("There is no profitable arbitrage")
+        else :
+            print(console_drawer.indent(tabulate([[console_drawer.G + "RESULTS" + console_drawer.W ]] ,tablefmt='fancy_grid' )))
+            print((tabulate([["For capital of " + console_drawer.G + str(capital) +" Euros, "+ console_drawer.W +" best arbitrage is between " + console_drawer.G + result[2] + " " +  console_drawer.ARROW + " " + result[1] + console_drawer.W + " for " + console_drawer.G + result[3] +  console_drawer.W + " with the value of " + console_drawer.G +str(result[0]) + " TRY " + console_drawer.W ]] ,tablefmt='fancy_grid' )))
